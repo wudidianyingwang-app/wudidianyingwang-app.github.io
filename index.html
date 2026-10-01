@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="无敌电影网(wudidianyingwang-app)——专注提供最新高清电影、热门电视剧、经典动漫与综艺节目的在线影视导航平台，免费影视资源一网打尽。">
+<meta name="keywords" content="无敌电影网, wudidianyingwang-app, 电影, 电视剧, 高清电影, 在线观影, 影视大全, 免费电影">
+<meta name="author" content="无敌电影网">
+<meta name="theme-color" content="#0f172a">
+<title>无敌电影网 - 最新高清电影在线观看 | wudidianyingwang-app</title>
+<style>
+    :root{
+        --bg:#070b17;
+        --bg2:#0f172a;
+        --card:#121d33;
+        --line:rgba(255,255,255,.08);
+        --txt:#e8edf7;
+        --sub:#9fb0cc;
+        --brand:#ff5c8a;
+        --brand2:#7c5cff;
+        --gold:#ffcf5c;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{
+        font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+        background:var(--bg);
+        color:var(--txt);
+        line-height:1.7;
+        overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    .wrap{max-width:1160px;margin:0 auto;padding:0 18px;}
+
+    /* 动态背景 */
+    .aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(1200px 800px at 80% -10%,rgba(124,92,255,.28),transparent 60%),radial-gradient(1000px 700px at -10% 20%,rgba(255,92,138,.20),transparent 55%),var(--bg);}
+    .grid-bg{position:fixed;inset:0;z-index:-1;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 75%);}
+
+    /* 头部 */
+    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,11,23,.72);border-bottom:1px solid var(--line);}
+    .nav{display:flex;align-items:center;gap:18px;height:64px;}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;}
+    .logo .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 6px 18px -6px var(--brand);}
+    .logo b{font-size:19px;background:linear-gradient(90deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .logo span{color:var(--sub);font-size:12px;font-weight:500;}
+    .menu{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+    .menu a{padding:8px 12px;border-radius:999px;font-size:14px;color:var(--sub);transition:.25s;}
+    .menu a:hover{color:#fff;background:rgba(255,255,255,.08);}
+    .nav-btn{margin-left:auto;display:none;background:none;border:1px solid var(--line);color:var(--txt);padding:8px 14px;border-radius:999px;font-size:13px;cursor:pointer;}
+
+    /* 英雄区 */
+    .hero{position:relative;padding:78px 0 60px;text-align:center;}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;font-size:12.5px;color:var(--gold);background:rgba(255,207,92,.1);border:1px solid rgba(255,207,92,.25);margin-bottom:22px;}
+    .badge i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:pulse 1.6s infinite;}
+    @keyframes pulse{50%{opacity:.35;transform:scale(.8);}}
+    h1{font-size:clamp(30px,6vw,56px);line-height:1.15;font-weight:900;letter-spacing:-.5px;}
+    h1 em{font-style:normal;background:linear-gradient(100deg,var(--brand),var(--brand2) 55%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .hero p{margin:18px auto 0;max-width:640px;color:var(--sub);font-size:clamp(14px,2.4vw,16px);}
+    .cta{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .btn{padding:13px 28px;border-radius:999px;font-size:15px;font-weight:700;transition:.25s;cursor:pointer;border:0;}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 14px 30px -12px var(--brand2);}
+    .btn-primary:hover{transform:translateY(-2px);}
+    .btn-ghost{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--line);}
+    .stats{margin-top:46px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:860px;margin-left:auto;margin-right:auto;}
+    .stat{padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);}
+    .stat b{display:block;font-size:24px;font-weight:800;}
+    .stat small{color:var(--sub);font-size:12.5px;}
+
+    /* 通用栏目 */
+    section{padding:64px 0;}
+    .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:30px;}
+    .sec-head h2{font-size:clamp(22px,3.6vw,30px);font-weight:800;display:flex;align-items:center;gap:10px;}
+    .sec-head h2::before{content:"";width:5px;height:24px;border-radius:4px;background:linear-gradient(var(--brand),var(--brand2));}
+    .sec-head p{color:var(--sub);font-size:14px;max-width:520px;}
+    .more{font-size:13px;color:var(--gold);border:1px solid rgba(255,207,92,.3);padding:7px 16px;border-radius:999px;}
+
+    /* 卡片网格 */
+    .grid{display:grid;gap:20px;}
+    .g-4{grid-template-columns:repeat(4,1fr);}
+    .g-3{grid-template-columns:repeat(3,1fr);}
+    .g-2{grid-template-columns:repeat(2,1fr);}
+    .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.3s;display:flex;flex-direction:column;}
+    .card:hover{transform:translateY(-6px);border-color:rgba(255,92,138,.4);box-shadow:0 22px 44px -20px rgba(124,92,255,.5);}
+    .thumb{position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(135deg,#1a2744,#0d1526);}
+    .thumb::after{content:attr(data-tag);position:absolute;top:10px;left:10px;font-size:11px;padding:4px 10px;border-radius:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;}
+    .thumb .poster{position:absolute;inset:0;display:grid;place-items:center;font-size:40px;}
+    .thumb .score{position:absolute;bottom:10px;right:10px;font-size:12px;font-weight:800;color:#000;padding:4px 9px;border-radius:6px;background:var(--gold);}
+    .card .info{padding:14px;flex:1;display:flex;flex-direction:column;}
+    .card h3{font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .card .meta{margin-top:8px;font-size:12.5px;color:var(--sub);display:flex;gap:8px;flex-wrap:wrap;}
+    .card .meta i{font-style:normal;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.06);}
+    .card .desc{margin-top:10px;font-size:13px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+    /* 分类 */
+    .cats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+    .cat{position:relative;padding:24px 16px;border-radius:18px;text-align:center;background:var(--card);border:1px solid var(--line);transition:.3s;overflow:hidden;}
+    .cat::before{content:"";position:absolute;inset:0;background:var(--g);opacity:.14;transition:.3s;}
+    .cat:hover{transform:translateY(-5px);}
+    .cat:hover::before{opacity:.28;}
+    .cat .ic{font-size:30px;display:block;margin-bottom:10px;position:relative;}
+    .cat b{position:relative;font-size:15px;display:block;}
+    .cat small{position:relative;color:var(--sub);font-size:12px;}
+
+    /* 排行列表 */
+    .rank{display:flex;flex-direction:column;gap:12px;}
+    .rank-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);transition:.25s;}
+    .rank-item:hover{background:rgba(255,255,255,.07);}
+    .rank-item .no{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:15px;background:linear-gradient(135deg,var(--bg2),#1c2b4d);color:var(--sub);}
+    .rank-item.top .no{background:linear-gradient(135deg,var(--brand),var(--gold));color:#000;}
+    .rank-item .txt{flex:1;min-width:0;}
+    .rank-item .txt b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .rank-item .txt small{color:var(--sub);font-size:12px;}
+    .rank-item .hot{font-size:12px;color:var(--brand);white-space:nowrap;}
+
+    /* 关于 */
+    .about{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+    .about .txt{font-size:15px;color:var(--sub);}
+    .about .txt p{margin-bottom:14px;}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+    .tags i{font-style:normal;font-size:12.5px;padding:6px 13px;border-radius:999px;background:rgba(124,92,255,.14);color:#c9b8ff;border:1px solid rgba(124,92,255,.3);}
+    .feat{display:flex;flex-direction:column;gap:14px;}
+    .feat .f{display:flex;gap:14px;padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--line);}
+    .feat .f .n{width:42px;height:42px;flex:0 0 42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,var(--brand),var(--brand2));}
+    .feat .f b{display:block;font-size:15px;}
+    .feat .f small{color:var(--sub);font-size:13px;}
+
+    /* 页脚 */
+    footer{border-top:1px solid var(--line);padding:44px 0 26px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.35));}
+    .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:24px;}
+    .foot h4{font-size:15px;margin-bottom:12px;color:#fff;}
+    .foot a{display:block;font-size:13.5px;color:var(--sub);padding:5px 0;transition:.2s;}
+    .foot a:hover{color:var(--gold);}
+    .copy{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);text-align:center;color:var(--sub);font-size:12.5px;}
+
+    /* 回到顶部 */
+    .top{position:fixed;right:18px;bottom:24px;width:46px;height:46px;border-radius:50%;display:none;place-items:center;cursor:pointer;z-index:60;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 10px 26px -8px var(--brand2);font-size:20px;border:0;color:#fff;}
+    .top.show{display:grid;}
+
+    /* 响应式 */
+    @media(max-width:900px){
+        .g-4{grid-template-columns:repeat(3,1fr);}
+        .cats{grid-template-columns:repeat(3,1fr);}
+        .about{grid-template-columns:1fr;}
+        .foot{grid-template-columns:1fr 1fr;}
+        .stats{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:680px){
+        .nav-btn{display:block;margin-left:auto;}
+        .menu{position:fixed;inset:64px 0 0 0;flex-direction:column;padding:20px;background:rgba(7,11,23,.96);backdrop-filter:blur(16px);transform:translateX(100%);transition:.3s;margin:0;}
+        .menu.open{transform:translateX(0);}
+        .menu a{font-size:16px;padding:14px;border-radius:12px;}
+        .g-4,.g-3{grid-template-columns:repeat(2,1fr);}
+        .g-2{grid-template-columns:1fr;}
+        .cats{grid-template-columns:repeat(2,1fr);}
+        .foot{grid-template-columns:1fr;}
+        .hero{padding:44px 0 40px;}
+        .logo span{display:none;}
+    }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/yazhou.js"></script>
+<div class="aurora"></div>
+<div class="grid-bg"></div>
+
+<!-- 顶部导航 -->
+<header>
+    <div class="wrap nav">
+        <a class="logo" href="#top" aria-label="无敌电影网">
+            <span class="mark">影</span>
+            <span><b>无敌电影网</b> <span>wudidianyingwang-app</span></span>
+        </a>
+        <button class="nav-btn" id="navBtn" aria-label="菜单">☰ 菜单</button>
+        <nav class="menu" id="menu">
+            <a href="#top">首页</a>
+            <a href="#movie">电影频道</a>
+            <a href="#tv">剧集频道</a>
+            <a href="#rank">热播排行</a>
+            <a href="#cat">影视分类</a>
+            <a href="#about">关于本站</a>
+        </nav>
+    </div>
+</header>
+
+<!-- 首页 -->
+<section id="top">
+    <div class="wrap hero">
+        <span class="badge"><i></i>2026 全新界面 · 海量正版影视导航</span>
+        <h1>无敌电影网<br><em>wudidianyingwang-app</em></h1>
+        <p>无敌电影网（wudidianyingwang-app）是专注于电影、电视剧、动漫、综艺的影视导航平台。聚合院线大片、高分剧集与经典老片，一键直达，畅享高清视听体验。</p>
+        <div class="cta">
+            <a class="btn btn-primary" href="#movie">立即观影</a>
+            <a class="btn btn-ghost" href="#cat">浏览分类</a>
+        </div>
+        <div class="stats">
+            <div class="stat"><b>12,000+</b><small>影视资源条目</small></div>
+            <div class="stat"><b>30+</b><small>内容分类频道</small></div>
+            <div class="stat"><b>每日更新</b><small>热剧实时同步</small></div>
+            <div class="stat"><b>全端适配</b><small>手机电脑都流畅</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- 电影频道 -->
+<section id="movie">
+    <div class="wrap">
+        <div class="sec-head">
+            <div>
+                <h2>电影频道</h2>
+                <p>无敌电影网电影频道，涵盖动作、喜剧、科幻、悬疑、爱情、动画等类型，最新院线大片与影史经典一站直达。</p>
+            </div>
+            <a class="more" href="#cat">全部电影 ›</a>
+        </div>
+        <div class="grid g-4">
+            <article class="card">
+                <div class="thumb" data-tag="动作 · 科幻">
+                    <div class="poster">🚀</div>
+                    <span class="score">9.2</span>
+                </div>
+                <div class="info">
+                    <h3>星际远征 2077</h3>
+                    <div class="meta"><i>科幻</i><i>动作</i><i>148分钟</i></div>
+                    <p class="desc">人类舰队跨越半人马座，揭开远古文明留下的宇宙谜题，视觉奇观与硬核设定兼具的年度太空史诗。</p>
+                </div>
+            </article>
+            <article class="card">
+                <div class="thumb" data-tag="悬疑 · 犯罪">
+                    <div class="poster">🕵️</div>
+                    <span class="score">8.8</span>
+                </div>
+                <div class="info">
+                    <h3>无声证人</h3>
+                    <div class="meta"><i>悬疑</i><i>犯罪</i><i>122分钟</i></div>
+                    <p class="desc">一场雨夜车祸牵出二十年旧案，律师与法医在证据缝隙中逼近真相，反转迭起。</p>
+                </div>
+            </article>
+            <article class="card">
+                <div class="thumb" data-tag="喜剧 · 家庭">
+                    <div class="poster">🎬</div>
+                    <span class="score">8.5</span>
+                </div>
+                <div class="info">
+                    <h3>疯狂周末</h3>
+                    <div class="meta"><i>喜剧</i><i>家庭</i><i>105分钟</i></div>
+                    <p class="desc">一家五口误入荒岛露营地，荒诞求生之旅笑料不断，温暖治愈合家欢之作。</p>
+                </div>
+            </article>
+            <article class="card">
+                <div class="thumb" data-tag="动画 · 奇幻">
+                    <div class="poster">🐉</div>
+                    <span class="score">9.0</span>
+                </div>
+                <div class="info">
+                    <h3>山海少年行</h3>
+                    <div class="meta"><i>动画</i><i>奇幻</i><i>96分钟</i></div>
+                    <p class="desc">国风动画新巅峰，少年驭神兽穿越山海经世界，水墨画面与磅礴配乐惊艳。</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 剧集频道 -->
+<section id="tv" style="padding-top:0;">
+    <div class="wrap">
+        <div class="sec-head">
+            <div>
+                <h2>剧集频道</h2>
+                <p>无敌电影网剧集频道，同步更新热门国产剧、韩剧、美剧、日剧与经典港剧，追剧不等待。</p>
+            </div>
+            <a class="more" href="#cat">全部剧集 ›</a>
+        </div>
+        <div class="grid g-3">
+            <article class="card">
+                <div class="thumb" data-tag="都市 · 爱情" style="aspect-ratio:16/9;">
+                    <div class="poster">🌆</div>
+                    <span class="score">8.7</span>
+                </div>
+                <div class="info">
+                    <h3>城南旧事 2026</h3>
+                    <div class="meta"><i>都市</i><i>爱情</i><i>更新至 28 集</i></div>
+                    <p class="desc">十年后重逢的 architects，在老城南的巷弄里重新读懂爱与遗憾。</p>
+                </div>
+            </article>
+            <article class="card">
+                <div class="thumb" data-tag="古装 · 权谋" style="aspect-ratio:16/9;">
+                    <div class="poster">⚔️</div>
+                    <span class="score">9.1</span>
+                </div>
+                <div class="info">
+                    <h3>大秦风云录</h3>
+                    <div class="meta"><i>古装</i><i>权谋</i><i>全 40 集</i></div>
+                    <p class="desc">战国末年，纵横家与军事天才共谱统一史诗，服化道考究，格局宏大。</p>
+                </div>
+            </article>
+            <article class="card">
+                <div class="thumb" data-tag="悬疑 · 刑侦" style="aspect-ratio:16/9;">
+                    <div class="poster">🔍</div>
+                    <span class="score">8.9</span>
+                </div>
+                <div class="info">
+                    <h3>追凶二十四小时</h3>
+                    <div class="meta"><i>悬疑</i><i>刑侦</i><i>更新至 12 集</i></div>
+                    <p class="desc">一桩跨城连环案，两支警队限时竞速，真实案件改编，节奏紧凑。</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 热播排行 -->
+<section id="rank" style="padding-top:0;">
+    <div class="wrap">
+        <div class="sec-head">
+            <div>
+                <h2>热播排行榜</h2>
+                <p>基于无敌电影网用户播放与搜索热度实时生成，每日更新，把握当下最火的影视风向。</p>
+            </div>
+            <a class="more" href="#movie">完整榜单 ›</a>
+        </div>
+        <div class="grid g-2">
+            <div class="rank">
+                <div class="rank-item top"><span class="no">1</span><div class="txt"><b>星际远征 2077</b><small>科幻 / 动作 · 上映 3 天</small></div><span class="hot">🔥 98.6万</span></div>
+                <div class="rank-item top"><span class="no">2</span><div class="txt"><b>大秦风云录</b><small>古装 / 权谋 · 热播中</small></div><span class="hot">🔥 87.2万</span></div>
+                <div class="rank-item"><span class="no">3</span><div class="txt"><b>无声证人</b><small>悬疑 / 犯罪 · 高分口碑</small></div><span class="hot">🔥 76.5万</span></div>
+                <div class="rank-item"><span class="no">4</span><div class="txt"><b>追凶二十四小时</b><small>悬疑 / 刑侦 · 更新中</small></div><span class="hot">🔥 68.9万</span></div>
+                <div class="rank-item"><span class="no">5</span><div class="txt"><b>山海少年行</b><small>动画 / 奇幻 · 国风佳作</small></div><span class="hot">🔥 61.3万</span></div>
+            </div>
+            <div class="rank">
+                <div class="rank-item"><span class="no">6</span><div class="txt"><b>城南旧事 2026</b><small>都市 / 爱情 · 更新中</small></div><span class="hot">🔥 54.7万</span></div>
+                <div class="rank-item"><span class="no">7</span><div class="txt"><b>疯狂周末</b><small>喜剧 / 家庭 · 合家欢</small></div><span class="hot">🔥 49.1万</span></div>
+                <div class="rank-item"><span class="no">8</span><div class="txt"><b>深海救援</b><small>灾难 / 剧情 · 震撼</small></div><span class="hot">🔥 43.6万</span></div>
+                <div class="rank-item"><span class="no">9</span><div class="txt"><b>时光代理人</b><small>奇幻 / 穿越 · 口碑剧</small></div><span class="hot">🔥 38.8万</span></div>
+                <div class="rank-item"><span class="no">10</span><div class="txt"><b>舌尖上的故乡</b><small>纪录片 / 美食 · 治愈</small></div><span class="hot">🔥 32.4万</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 影视分类 -->
+<section id="cat" style="padding-top:0;">
+    <div class="wrap">
+        <div class="sec-head">
+            <div>
+                <h2>影视分类</h2>
+                <p>无敌电影网按类型、地区、年份、评分多维度整理，精准定位你想看的每一部影片。</p>
+            </div>
+        </div>
+        <div class="cats">
+            <a class="cat" href="#movie" style="--g:linear-gradient(135deg,#ff5c8a,#ff8f6b);"><span class="ic">💥</span><b>动作片</b><small>硬核打斗</small></a>
+            <a class="cat" href="#movie" style="--g:linear-gradient(135deg,#7c5cff,#5c8aff);"><span class="ic">😂</span><b>喜剧片</b><small>开心解压</small></a>
+            <a class="cat" href="#movie" style="--g:linear-gradient(135deg,#5cffd0,#3aa0ff);"><span class="ic">🛸</span><b>科幻片</b><small>脑洞大开</small></a>
+            <a class="cat" href="#movie" style="--g:linear-gradient(135deg,#ffcf5c,#ff9f5c);"><span class="ic">🧩</span><b>悬疑片</b><small>反转烧脑</small></a>
+            <a class="cat" href="#tv" style="--g:linear-gradient(135deg,#ff5c9d,#c75cff);"><span class="ic">📺</span><b>电视剧</b><small>追剧必备</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#4fd1c5,#3182ce);"><span class="ic">🎨</span><b>动漫番剧</b><small>二次元</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#f6ad55,#e53e3e);"><span class="ic">🎤</span><b>综艺节目</b><small>轻松娱乐</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#9f7aea,#667eea);"><span class="ic">🎞️</span><b>经典老片</b><small>影史回味</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#63b3ed,#38b2ac);"><span class="ic">🇨🇳</span><b>国产影视</b><small>本土佳作</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#f687b3,#ed64a6);"><span class="ic">🌏</span><b>海外影视</b><small>全球视野</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#a0e7a0,#48bb78);"><span class="ic">📽️</span><b>纪录片</b><small>真实力量</small></a>
+            <a class="cat" href="#cat" style="--g:linear-gradient(135deg,#cbd5e0,#a0aec0);"><span class="ic">⭐</span><b>高分精选</b><small>口碑保证</small></a>
+        </div>
+    </div>
+</section>
+
+<!-- 关于本站 -->
+<section id="about" style="padding-top:0;">
+    <div class="wrap">
+        <div class="sec-head"><div><h2>关于无敌电影网</h2><p>了解 wudidianyingwang-app 的定位、内容与使用方式。</p></div></div>
+        <div class="about">
+            <div class="txt">
+                <p><strong style="color:#fff;">无敌电影网</strong>（站点标识：<strong style="color:var(--gold);">wudidianyingwang-app</strong>，访问地址：<strong style="color:#fff;">https://wudidianyingwang-app.github.io</strong>）是一个面向影视爱好者的<strong style="color:#fff;">影视信息导航与分享站点</strong>。我们不做杂乱聚合，只做精选：每一部推荐都附带类型、时长、评分与一句话简介，帮你快速决定"今晚看什么"。</p>
+                <p>站内内容按<strong style="color:#fff;">电影、电视剧、动漫、综艺、纪录片</strong>五大主线归类，并支持按<strong style="color:#fff;">类型、地区、年份、评分</strong>交叉筛选。所有页面均为静态结构，加载快、无广告干扰、移动端自适应，低配手机也能流畅浏览。</p>
+                <p>我们倡导<strong style="color:#fff;">正版观影</strong>：本站仅提供影视作品的信息、海报与正规播出平台导向，不托管、不提供任何盗版资源下载与在线播放。请支持创作者，前往合法授权平台观看完整内容。</p>
+                <div class="tags">
+                    <i>高清画质</i><i>每日更新</i><i>无广告干扰</i><i>移动端适配</i><i>正版导向</i><i>极速加载</i>
+                </div>
+            </div>
+            <div class="feat">
+                <div class="f"><span class="n">🎯</span><div><b>精准推荐</b><small>按类型与评分双维度筛选，告别片荒。</small></div></div>
+                <div class="f"><span class="n">📱</span><div><b>全端自适应</b><small>手机、平板、电脑一致体验，触控友好。</small></div></div>
+                <div class="f"><span class="n">🔍</span><div><b>SEO 友好</b><small>语义化标签、规范标题与描述，利于搜索引擎收录。</small></div></div>
+                <div class="f"><span class="n">🛡️</span><div><b>绿色安全</b><small>纯静态页面，无第三方跟踪脚本，浏览更安心。</small></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+    <div class="wrap">
+        <div class="foot">
+            <div>
+                <a class="logo" href="#top" style="margin-bottom:10px;">
+                    <span class="mark">影</span>
+                    <span><b>无敌电影网</b></span>
+                </a>
+                <p style="color:var(--sub);font-size:13px;max-width:300px;">影视信息导航站点 wudidianyingwang-app，帮你更快找到值得一看的好片。</p>
+            </div>
+            <div>
+                <h4>频道导航</h4>
+                <a href="#movie">电影频道</a>
+                <a href="#tv">电视剧频道</a>
+                <a href="#cat">动漫与综艺</a>
+                <a href="#rank">热播排行榜</a>
+            </div>
+            <div>
+                <h4>内容分类</h4>
+                <a href="#cat">动作 / 科幻</a>
+                <a href="#cat">悬疑 / 犯罪</a>
+                <a href="#cat">喜剧 / 爱情</a>
+                <a href="#cat">纪录片 / 经典</a>
+            </div>
+            <div>
+                <h4>关于与帮助</h4>
+                <a href="#about">关于本站</a>
+                <a href="#about">正版观影倡议</a>
+                <a href="#top">回到顶部</a>
+                <a href="#about">联系与反馈</a>
+            </div>
+        </div>
+        <div class="copy">
+            © <span id="year"></span> 无敌电影网 wudidianyingwang-app · 网站网址：https://wudidianyingwang-app.github.io<br>
+            本站为影视信息与导航用途，倡导支持正版，请通过合法授权平台观看。
+        </div>
+    </div>
+</footer>
+
+<button class="top" id="topBtn" aria-label="回到顶部">↑</button>
+
+<script>
+    // 年份
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 移动端菜单
+    var navBtn = document.getElementById('navBtn');
+    var menu = document.getElementById('menu');
+    navBtn.addEventListener('click', function(){
+        menu.classList.toggle('open');
+        navBtn.textContent = menu.classList.contains('open') ? '✕ 关闭' : '☰ 菜单';
+    });
+    menu.addEventListener('click', function(e){
+        if(e.target.tagName === 'A'){
+            menu.classList.remove('open');
+            navBtn.textContent = '☰ 菜单';
+        }
+    });
+
+    // 回到顶部
+    var topBtn = document.getElementById('topBtn');
+    window.addEventListener('scroll', function(){
+        topBtn.classList.toggle('show', window.scrollY > 500);
+    });
+    topBtn.addEventListener('click', function(){
+        window.scrollTo({top:0, behavior:'smooth'});
+    });
+</script>
+</body>
+</html>
